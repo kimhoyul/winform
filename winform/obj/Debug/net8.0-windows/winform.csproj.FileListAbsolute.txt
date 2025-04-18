@@ -1,0 +1,16 @@
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\winform.exe
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\winform.deps.json
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\winform.runtimeconfig.json
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\winform.dll
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\winform.pdb
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.Form1.resources
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.csproj.GenerateResource.cache
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.GeneratedMSBuildEditorConfig.editorconfig
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.AssemblyInfoInputs.cache
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.AssemblyInfo.cs
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.csproj.CoreCompileInputs.cache
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.dll
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\refint\winform.dll
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.pdb
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.genruntimeconfig.cache
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\ref\winform.dll
