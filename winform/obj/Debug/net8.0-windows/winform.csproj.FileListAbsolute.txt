@@ -14,3 +14,4 @@ D:\Csharp\winform\winform\obj\Debug\net8.0-windows\refint\winform.dll
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.pdb
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.genruntimeconfig.cache
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\ref\winform.dll
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.sourcelink.json

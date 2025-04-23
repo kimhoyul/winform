@@ -37,7 +37,7 @@ namespace winform
             try
             {
                 process = new Process();
-                process.StartInfo.FileName = "Simul-WaferHBM.exe";
+                process.StartInfo.FileName = @"D:\Unity\Project\sk-main\bin\Simul-WaferHBM.exe";
 
                 process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
                 process.StartInfo.UseShellExecute = true;
@@ -154,7 +154,23 @@ namespace winform
         {
             if (pipeServer != null && pipeServer.IsConnected && writer != null)
             {
-                writer.WriteLine("버튼이 눌렸습니다!");
+                try
+                {
+                    string jsonFilePath = @"D:\Unity\Project\sk-main\bin\wafer_data.json"; 
+                    if (!File.Exists(jsonFilePath))
+                    {
+                        MessageBox.Show("JSON 파일이 존재하지 않습니다: " + jsonFilePath);
+                        return;
+                    }
+
+                    string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
+
+                    writer.WriteLine(jsonContent);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("파일 읽기 또는 전송 중 오류 발생:\n" + ex.Message);
+                }
             }
             else
             {
