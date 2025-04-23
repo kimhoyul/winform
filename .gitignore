@@ -1,1 +1,3 @@
 /winform/bin/Debug
+.vs/
+!.vs/YourSolutionName/vs*.suo

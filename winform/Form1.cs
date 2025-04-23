@@ -37,7 +37,7 @@ namespace winform
             try
             {
                 process = new Process();
-                process.StartInfo.FileName = @"D:\Unity\Project\sk-main\bin\Simul-WaferHBM.exe";
+                process.StartInfo.FileName = @"D:\Unity\Project\sk\bin\Simul-WaferHBM.exe";
 
                 process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
                 process.StartInfo.UseShellExecute = true;
@@ -156,7 +156,8 @@ namespace winform
             {
                 try
                 {
-                    string jsonFilePath = @"D:\Unity\Project\sk-main\bin\wafer_data.json"; 
+                    string jsonFilePath = @"D:\Unity\Project\sk\bin\wafer_data.json";
+
                     if (!File.Exists(jsonFilePath))
                     {
                         MessageBox.Show("JSON 파일이 존재하지 않습니다: " + jsonFilePath);
@@ -166,6 +167,7 @@ namespace winform
                     string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
 
                     writer.WriteLine(jsonContent);
+                    writer.WriteLine("<END>");
                 }
                 catch (Exception ex)
                 {
