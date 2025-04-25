@@ -34,33 +34,33 @@ namespace winform
         {
             InitializeComponent();
 
-            try
-            {
-                process = new Process();
-                process.StartInfo.FileName = @"D:\Unity\Project\sk\bin\Simul-WaferHBM.exe";
+            //try
+            //{
+            //    process = new Process();
+            //    process.StartInfo.FileName = @"D:\Unity\Project\sk\bin\Simul-WaferHBM.exe";
 
-                process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
-                process.StartInfo.UseShellExecute = true;
-                process.StartInfo.CreateNoWindow = true;
+            //    process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
+            //    process.StartInfo.UseShellExecute = true;
+            //    process.StartInfo.CreateNoWindow = true;
 
-                process.Start();
+            //    process.Start();
 
-                process.WaitForInputIdle();
+            //    process.WaitForInputIdle();
 
-                // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
-                // 시간을 주어야 실행이 가능하다.
-                Thread.Sleep(3000);
+            //    // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
+            //    // 시간을 주어야 실행이 가능하다.
+            //    Thread.Sleep(3000);
 
-                // Doesn't work for some reason ?!
-                //unityHWND = process.MainWindowHandle;
-                EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
+            //    // Doesn't work for some reason ?!
+            //    //unityHWND = process.MainWindowHandle;
+            //    EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
 
-                //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
-            }
+            //    //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
+            //}
 
             Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
         }
@@ -95,7 +95,22 @@ namespace winform
                     {
                         BeginInvoke(() =>
                         {
-                            label1.Text = "[Unity] " + line;
+                            if (line.Contains("GetStackMap"))
+                            {
+                                const string jsonFilePath = @"D:\Unity\Project\sk\bin\stack_map_data.json";
+
+                                if (!File.Exists(jsonFilePath))
+                                {
+                                    ShowError($"JSON 파일이 존재하지 않습니다:\n{jsonFilePath}");
+                                    return;
+                                }
+
+                                string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
+
+                                Send(jsonContent);
+
+                                Console.WriteLine(jsonContent);
+                            }
                         });
                     }
                     else
@@ -138,6 +153,18 @@ namespace winform
                     process.Kill();
             }
             catch (Exception) { }
+
+            try
+            {
+                writer?.Close();
+                reader?.Close();
+                pipeServer?.Dispose();
+                pipeServer = null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Named Pipe 정리 중 오류:\n" + ex.Message);
+            }
         }
 
         private void ContainerForm_Activated(object sender, EventArgs e)
@@ -150,34 +177,46 @@ namespace winform
             DeactivateUnityWindow();
         }
 
+        private bool Send(string json)
+        {
+            if (pipeServer == null || !pipeServer.IsConnected || writer == null)
+            {
+                ShowError("Unity와 아직 연결되지 않았습니다.");
+                return false;
+            }
+
+            try
+            {
+                writer.WriteLine(json);
+                writer.WriteLine("<END>");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"파일 읽기 또는 전송 중 오류 발생:\n{ex.Message}");
+                return false;
+            }
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "전송 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (pipeServer != null && pipeServer.IsConnected && writer != null)
+            const string jsonFilePath = @"D:\Unity\Project\sk\bin\wafer_data.json";
+
+            if (!File.Exists(jsonFilePath))
             {
-                try
-                {
-                    string jsonFilePath = @"D:\Unity\Project\sk\bin\wafer_data.json";
-
-                    if (!File.Exists(jsonFilePath))
-                    {
-                        MessageBox.Show("JSON 파일이 존재하지 않습니다: " + jsonFilePath);
-                        return;
-                    }
-
-                    string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
-
-                    writer.WriteLine(jsonContent);
-                    writer.WriteLine("<END>");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("파일 읽기 또는 전송 중 오류 발생:\n" + ex.Message);
-                }
+                ShowError($"JSON 파일이 존재하지 않습니다:\n{jsonFilePath}");
+                return;
             }
-            else
-            {
-                MessageBox.Show("Unity와 아직 연결되지 않았습니다.");
-            }
+
+            string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
+
+            Send(jsonContent);
         }
     }
 }
