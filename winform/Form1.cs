@@ -97,19 +97,22 @@ namespace winform
                         {
                             if (line.Contains("GetStackMap"))
                             {
-                                const string jsonFilePath = @"D:\Unity\Project\sk\bin\stack_map_data.json";
+                                string jsonContent = GetJsonData("stack_map_data");
 
-                                if (!File.Exists(jsonFilePath))
-                                {
-                                    ShowError($"JSON 파일이 존재하지 않습니다:\n{jsonFilePath}");
+                                if (jsonContent == "error")
                                     return;
-                                }
-
-                                string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
 
                                 Send(jsonContent);
+                            }
 
-                                Console.WriteLine(jsonContent);
+                            if (line.Contains("GetNoinkMap"))
+                            {
+                                string jsonContent = GetJsonData("noink_map_data");
+
+                                if (jsonContent == "error")
+                                    return;
+
+                                Send(jsonContent);
                             }
                         });
                     }
@@ -123,6 +126,21 @@ namespace winform
             {
                 BeginInvoke(() => MessageBox.Show("Unity와의 파이프 연결이 끊어졌습니다.\n" + ex.Message));
             }
+        }
+
+        private string GetJsonData(string fileName)
+        {
+            string jsonFilePath = $@"D:\Unity\Project\sk\bin\{fileName}.json";
+
+            if (!File.Exists(jsonFilePath))
+            {
+                ShowError($"JSON 파일이 존재하지 않습니다:\n{jsonFilePath}");
+                return "error";
+            }
+
+            string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
+
+            return jsonContent;
         }
 
         private void ActivateUnityWindow()
@@ -206,15 +224,10 @@ namespace winform
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            const string jsonFilePath = @"D:\Unity\Project\sk\bin\wafer_data.json";
+            string jsonContent = GetJsonData("wafer_data");
 
-            if (!File.Exists(jsonFilePath))
-            {
-                ShowError($"JSON 파일이 존재하지 않습니다:\n{jsonFilePath}");
+            if (jsonContent == "error")
                 return;
-            }
-
-            string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
 
             Send(jsonContent);
         }
