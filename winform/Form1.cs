@@ -68,13 +68,15 @@ namespace winform
         private void StartPipeServer()
         {
             pipeServer = new NamedPipeServerStream("MyPipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
-            Console.WriteLine("파이프 서버: Unity 연결 대기 중...");
+            // Console.WriteLine("파이프 서버: Unity 연결 대기 중...");
+            BeginInvoke(() => textBox1.Text = "파이프 서버: Unity 연결 대기 중...");
 
             pipeServer.WaitForConnection();
             reader = new StreamReader(pipeServer, Encoding.UTF8);
             writer = new StreamWriter(pipeServer, Encoding.UTF8) { AutoFlush = true };
 
-            Console.WriteLine("파이프 서버: Unity 연결됨");
+            //Console.WriteLine("파이프 서버: Unity 연결됨");
+            BeginInvoke(() => textBox1.Text = "파이프 서버: Unity 연결됨");
 
             // 읽기 루프 시작
             Task.Factory.StartNew(() => ReadLoop(), TaskCreationOptions.LongRunning);
@@ -82,7 +84,7 @@ namespace winform
 
         private void ReadLoop()
         {
-            Console.WriteLine("ReadLoop 시작됨");
+            BeginInvoke(() => textBox1.Text = "ReadLoop 시작됨");
 
             try
             {
@@ -118,9 +120,16 @@ namespace winform
                     }
                     else
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(1);
                     }
                 }
+                BeginInvoke(() => MessageBox.Show("Unity와의 파이프 연결이 종료되었습니다.\n"));
+                BeginInvoke(() => textBox1.Text = "Unity와의 파이프 연결이 종료되었습니다.\n");
+                pipeServer?.Dispose();
+                pipeServer = null;
+
+                // start over
+                Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
             }
             catch (IOException ex)
             {
@@ -130,7 +139,7 @@ namespace winform
 
         private string GetJsonData(string fileName)
         {
-            string jsonFilePath = $@"D:\Unity\Project\sk\bin\{fileName}.json";
+            string jsonFilePath = $@"D:\UnityGebal\MegazoneProjects\sk\Assets\02_Scripts\Data\{fileName}.json";
 
             if (!File.Exists(jsonFilePath))
             {
