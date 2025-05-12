@@ -99,12 +99,19 @@ namespace winform
                         {
                             if (line.Contains("GetStackMap"))
                             {
-                                string jsonContent = GetJsonData("stack_map_data");
+                                string stackMapJsonContent = GetJsonData("stack_map_data");
 
-                                if (jsonContent == "error")
+                                if (stackMapJsonContent == "error")
                                     return;
 
-                                Send(jsonContent);
+                                Send(stackMapJsonContent);
+
+                                string noinkMapJsonContent = GetJsonData("noinkmapgradecolor_list_data");
+
+                                if (noinkMapJsonContent == "error")
+                                    return;
+
+                                Send(noinkMapJsonContent);
                             }
 
                             if (line.Contains("GetNoinkMap"))
@@ -139,7 +146,7 @@ namespace winform
 
         private string GetJsonData(string fileName)
         {
-            string jsonFilePath = $@"D:\UnityGebal\MegazoneProjects\sk\Assets\02_Scripts\Data\{fileName}.json";
+            string jsonFilePath = $@"D:\Unity\Project\sk\Assets\02_Scripts\Data\{fileName}.json";
 
             if (!File.Exists(jsonFilePath))
             {
