@@ -99,19 +99,17 @@ namespace winform
                         {
                             if (line.Contains("GetStackMap"))
                             {
-                                string stackMapJsonContent = GetJsonData("stack_map_data");
-
-                                if (stackMapJsonContent == "error")
-                                    return;
-
-                                Send(stackMapJsonContent);
-
                                 string noinkMapJsonContent = GetJsonData("noinkmapgradecolor_list_data");
-
                                 if (noinkMapJsonContent == "error")
                                     return;
 
                                 Send(noinkMapJsonContent);
+
+                                string stackMapJsonContent = GetJsonData("stack_map_data");
+                                if (stackMapJsonContent == "error")
+                                    return;
+
+                                Send(stackMapJsonContent);
                             }
 
                             if (line.Contains("GetNoinkMap"))
