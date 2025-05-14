@@ -33,36 +33,40 @@ namespace winform
         public Form1()
         {
             InitializeComponent();
+            
+            this.HandleCreated += (s, e) =>
+            {
+                Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
+            };
 
-            //try
-            //{
-            //    process = new Process();
-            //    process.StartInfo.FileName = @"D:\Unity\Project\sk\bin\Simul-WaferHBM.exe";
+            try
+            {
+                process = new Process();
+                process.StartInfo.FileName = @"bin\Simul-WaferHBM.exe";
 
-            //    process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
-            //    process.StartInfo.UseShellExecute = true;
-            //    process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.CreateNoWindow = true;
 
-            //    process.Start();
+                process.Start();
 
-            //    process.WaitForInputIdle();
+                process.WaitForInputIdle();
 
-            //    // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
-            //    // 시간을 주어야 실행이 가능하다.
-            //    Thread.Sleep(3000);
+                // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
+                // 시간을 주어야 실행이 가능하다.
+                Thread.Sleep(3000);
 
-            //    // Doesn't work for some reason ?!
-            //    //unityHWND = process.MainWindowHandle;
-            //    EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
+                //unityHWND = process.MainWindowHandle;
+                EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
 
-            //    //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
-            //}
+                //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
+            }
 
-            Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
+            //Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
         }
 
         private void StartPipeServer()
@@ -144,7 +148,7 @@ namespace winform
 
         private string GetJsonData(string fileName)
         {
-            string jsonFilePath = $@"D:\Unity\Project\sk\Assets\02_Scripts\Data\{fileName}.json";
+            string jsonFilePath = $@"Data\{fileName}.json";
 
             if (!File.Exists(jsonFilePath))
             {
