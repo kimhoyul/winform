@@ -1,8 +1,10 @@
 using System.Diagnostics;
 using System.IO.Pipes;
+using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace winform
 {
@@ -39,32 +41,32 @@ namespace winform
                 Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
             };
 
-            try
-            {
-                process = new Process();
-                process.StartInfo.FileName = @"bin\Simul-WaferHBM.exe";
+            //try
+            //{
+            //    process = new Process();
+            //    process.StartInfo.FileName = @"bin\Simul-WaferHBM.exe";
 
-                process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
-                process.StartInfo.UseShellExecute = true;
-                process.StartInfo.CreateNoWindow = true;
+            //    process.StartInfo.Arguments = "-parentHWND " + panel1.Handle.ToInt32() + " " + Environment.CommandLine;
+            //    process.StartInfo.UseShellExecute = true;
+            //    process.StartInfo.CreateNoWindow = true;
 
-                process.Start();
+            //    process.Start();
 
-                process.WaitForInputIdle();
+            //    process.WaitForInputIdle();
 
-                // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
-                // 시간을 주어야 실행이 가능하다.
-                Thread.Sleep(3000);
+            //    // 실행이 되지 않는다면 아래 sleep 주어 Unity Game 가 로드되는 시간을 늘려 주면됩니다.
+            //    // 시간을 주어야 실행이 가능하다.
+            //    Thread.Sleep(3000);
 
-                //unityHWND = process.MainWindowHandle;
-                EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
+            //    //unityHWND = process.MainWindowHandle;
+            //    EnumChildWindows(panel1.Handle, WindowEnum, IntPtr.Zero);
 
-                //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
-            }
+            //    //unityHWNDLabel.Text = "Unity HWND: 0x" + unityHWND.ToString("X8");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message + ".\nCheck if Container.exe is placed next to Child.exe.");
+            //}
 
             //Task.Factory.StartNew(() => StartPipeServer(), TaskCreationOptions.LongRunning);
         }
@@ -109,21 +111,29 @@ namespace winform
 
                                 Send(noinkMapJsonContent);
 
-                                string stackMapJsonContent = GetJsonData("stack_map_data");
+                                string stackMapJsonContent = GetJsonData("stackmap");
                                 if (stackMapJsonContent == "error")
                                     return;
 
                                 Send(stackMapJsonContent);
-                            }
 
-                            if (line.Contains("GetNoinkMap"))
-                            {
-                                string jsonContent = GetJsonData("noink_map_data");
-
-                                if (jsonContent == "error")
+                                string stackNoinkMapJsonContent = GetJsonData("stacknoinkmap");
+                                if (stackNoinkMapJsonContent == "error")
                                     return;
 
-                                Send(jsonContent);
+                                Send(stackNoinkMapJsonContent);
+                            }
+
+                            if (line.StartsWith("GetNoinkMap"))
+                            {
+                                string[] parts = line.Split(':');
+                                if (parts.Length == 2)
+                                {
+                                    string chipData = parts[1].Trim(); // 공백 제거
+                                    string noinkMapJsonContent = GetNoinkMapData(chipData);
+
+                                    Send(noinkMapJsonContent);
+                                }
                             }
                         });
                     }
@@ -159,6 +169,54 @@ namespace winform
             string jsonContent = File.ReadAllText(jsonFilePath, Encoding.UTF8);
 
             return jsonContent;
+        }
+
+        public class NoInkMapItem
+        {
+            public string LOT_ID { get; set; }
+            public string WF_ID { get; set; }
+            public string OPER_ID { get; set; }
+            public string TSV_TYPE { get; set; }
+            public string PASS_DIE_QTY { get; set; }
+            public string FLAT_ZONE_TYPE { get; set; }
+            public string STACK_NO { get; set; }
+            public string X_AXIS { get; set; }
+            public string Y_AXIS { get; set; }
+            public string X_POSITION { get; set; }
+            public string Y_POSITION { get; set; }
+            public string DIE_VAL { get; set; }
+            public string DIE_X_COORDINATE { get; set; }
+            public string DIE_Y_COORDINATE { get; set; }
+        }
+
+        public class NoInkMapItemList
+        {
+            public List<NoInkMapItem> noinkmap_list { get; set; }
+        }
+
+        private string GetNoinkMapData(string chipData)
+        {
+            string jsonText = GetJsonData("noinkmap");
+            if (jsonText == "error")
+                return "";
+
+            string wfId = chipData.Substring(7, 2);
+            string xPos = int.Parse(chipData.Substring(9, 3)).ToString();
+            string yPos = int.Parse(chipData.Substring(12, 3)).ToString();
+
+            var jsonRoot = JsonConvert.DeserializeObject<NoInkMapItemList>(jsonText);
+
+            foreach (var item in jsonRoot.noinkmap_list)
+            {
+                if (item.WF_ID == wfId &&
+                    item.X_POSITION == xPos &&
+                    item.Y_POSITION == yPos)
+                {
+                    return JsonConvert.SerializeObject(item, Formatting.Indented);
+                }
+            }
+
+            return "";
         }
 
         private void ActivateUnityWindow()

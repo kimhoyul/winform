@@ -15,3 +15,6 @@ D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.pdb
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.genruntimeconfig.cache
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\ref\winform.dll
 D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.sourcelink.json
+D:\Csharp\winform\winform\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.csproj.AssemblyReference.cache
+D:\Csharp\winform\winform\obj\Debug\net8.0-windows\winform.csproj.Up2Date
