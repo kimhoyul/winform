@@ -200,23 +200,27 @@ namespace winform
             if (jsonText == "error")
                 return "";
 
-            string wfId = chipData.Substring(7, 2);                   
-            string xPos = chipData.Substring(10, 2);                   
-            string yPos = chipData.Substring(13, 2);
+            string wfId = chipData.Substring(7, 2);
+            string xPos = int.Parse(chipData.Substring(9, 3)).ToString();
+            string yPos = int.Parse(chipData.Substring(12, 3)).ToString();
 
             var jsonRoot = JsonConvert.DeserializeObject<NoInkMapItemList>(jsonText);
 
-            foreach (var item in jsonRoot.noinkmap_list)
-            {
-                if (item.WF_ID == wfId &&
-                    item.X_POSITION == xPos &&
-                    item.Y_POSITION == yPos)
-                {
-                    return JsonConvert.SerializeObject(item, Formatting.Indented);
-                }
-            }
+            var targetItem = jsonRoot.noinkmap_list.FirstOrDefault(item =>
+                item.WF_ID == wfId &&
+                item.X_POSITION == xPos &&
+                item.Y_POSITION == yPos);
 
-            return "";
+            if (targetItem == null)
+                return "";
+
+            var filteredItems = jsonRoot.noinkmap_list
+                .Where(item => item.WF_ID == targetItem.WF_ID)
+                .ToList();
+
+            var result = new NoInkMapItemList { noinkmap_list = filteredItems };
+
+            return JsonConvert.SerializeObject(result, Formatting.Indented);
         }
 
         private void ActivateUnityWindow()
