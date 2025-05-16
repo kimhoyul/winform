@@ -200,9 +200,9 @@ namespace winform
             if (jsonText == "error")
                 return "";
 
-            string wfId = chipData.Substring(7, 2);
-            string xPos = int.Parse(chipData.Substring(9, 3)).ToString();
-            string yPos = int.Parse(chipData.Substring(12, 3)).ToString();
+            string wfId = chipData.Substring(7, 2);                   
+            string xPos = chipData.Substring(10, 2);                   
+            string yPos = chipData.Substring(13, 2);
 
             var jsonRoot = JsonConvert.DeserializeObject<NoInkMapItemList>(jsonText);
 
