@@ -111,17 +111,17 @@ namespace winform
 
                                 Send(noinkMapJsonContent);
 
-                                string stackMapJsonContent = GetJsonData("stackmap");
-                                if (stackMapJsonContent == "error")
-                                    return;
-
-                                Send(stackMapJsonContent);
-
                                 string stackNoinkMapJsonContent = GetJsonData("stacknoinkmap");
                                 if (stackNoinkMapJsonContent == "error")
                                     return;
 
                                 Send(stackNoinkMapJsonContent);
+
+                                string stackMapJsonContent = GetJsonData("stackmap");
+                                if (stackMapJsonContent == "error")
+                                    return;
+
+                                Send(stackMapJsonContent);
                             }
 
                             if (line.StartsWith("GetNoinkMap"))
@@ -185,6 +185,7 @@ namespace winform
             public string X_POSITION { get; set; }
             public string Y_POSITION { get; set; }
             public string DIE_VAL { get; set; }
+            public string DIE_THICKNESS { get; set; }
             public string DIE_X_COORDINATE { get; set; }
             public string DIE_Y_COORDINATE { get; set; }
         }
@@ -304,7 +305,7 @@ namespace winform
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            string jsonContent = GetJsonData("wafer_data");
+            string jsonContent = GetJsonData("wafer");
 
             if (jsonContent == "error")
                 return;
