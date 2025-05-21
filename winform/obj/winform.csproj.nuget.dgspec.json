@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Csharp\\winform\\winform\\winform.csproj": {}
+    "D:\\Unity\\Project\\SK_Wafer\\Winform\\winform\\winform.csproj": {}
   },
   "projects": {
-    "D:\\Csharp\\winform\\winform\\winform.csproj": {
+    "D:\\Unity\\Project\\SK_Wafer\\Winform\\winform\\winform.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Csharp\\winform\\winform\\winform.csproj",
+        "projectUniqueName": "D:\\Unity\\Project\\SK_Wafer\\Winform\\winform\\winform.csproj",
         "projectName": "winform",
-        "projectPath": "D:\\Csharp\\winform\\winform\\winform.csproj",
-        "packagesPath": "C:\\Users\\MZC01-YOUNGHOON\\.nuget\\packages\\",
-        "outputPath": "D:\\Csharp\\winform\\winform\\obj\\",
+        "projectPath": "D:\\Unity\\Project\\SK_Wafer\\Winform\\winform\\winform.csproj",
+        "packagesPath": "C:\\Users\\Megazone\\.nuget\\packages\\",
+        "outputPath": "D:\\Unity\\Project\\SK_Wafer\\Winform\\winform\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MZC01-YOUNGHOON\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Megazone\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -69,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

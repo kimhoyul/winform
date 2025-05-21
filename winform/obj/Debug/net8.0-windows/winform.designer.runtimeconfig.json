@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\MZC01-YOUNGHOON\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\MZC01-YOUNGHOON\\.nuget\\packages"
+      "C:\\Users\\Megazone\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Megazone\\.nuget\\packages"
     ],
     "configProperties": {
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true,

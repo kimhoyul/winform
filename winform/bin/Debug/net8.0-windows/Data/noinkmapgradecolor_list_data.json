@@ -1,0 +1,44 @@
+{
+  "noinkmapgradecolor_list": [
+    {
+      "BINCHAR": "1",
+      "GRADE": "GRADE",
+      "PASS": "Y",
+      "REMARK": "",
+      "FORECOLOR": "74.90.233",
+      "BACKCOLOR": "63.3.255"
+    },
+    {
+      "BINCHAR": "2",
+      "GRADE": "GRADE",
+      "PASS": "Y",
+      "REMARK": "",
+      "FORECOLOR": "193.237.224",
+      "BACKCOLOR": "68.71.255"
+    },
+    {
+      "BINCHAR": "D",
+      "GRADE": "GRADE",
+      "PASS": "Y",
+      "REMARK": "",
+      "FORECOLOR": "78.53.135",
+      "BACKCOLOR": "148.102.51"
+    },
+    {
+      "BINCHAR": "V",
+      "GRADE": "GRADE",
+      "PASS": "Y",
+      "REMARK": "",
+      "FORECOLOR": "25.155.6",
+      "BACKCOLOR": "161.195.167"
+    },
+    {
+      "BINCHAR": "Z",
+      "GRADE": "GRADE",
+      "PASS": "Y",
+      "REMARK": "",
+      "FORECOLOR": "7.231.159",
+      "BACKCOLOR": "32.220.41"
+    }
+  ]
+}
