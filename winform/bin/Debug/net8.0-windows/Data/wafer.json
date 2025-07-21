@@ -5,6 +5,12 @@
             "WF_ID": "01",
             "PRODUCT_STATE": "GOOD",
             "POSITION": "1"
+        },
+        {
+            "LOT_ID": "T7HJ217",
+            "WF_ID": "02",
+            "PRODUCT_STATE": "GOOD",
+            "POSITION": "2"
         }
     ]
 }
